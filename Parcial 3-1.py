@@ -6,11 +6,11 @@ from pyfirmata import Arduino, util
 from tkinter import *
 import time
 
-placa = Arduino('COM5')
+placa = Arduino('COM3')
 it = util.Iterator(placa)
 it.start()
 
-cred = credentials.Certificate('keys/key')
+cred = credentials.Certificate('keys/key.json')
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://parcial-191119.firebaseio.com/'
 })
@@ -27,20 +27,25 @@ frame1 = Frame(ventana, bg="gray", highlightthickness=1, width=1280, height=800,
 frame1.place(x=0, y=0)
 
 read_data0 = analog_0.read()
+print(read_data0)
 read_data1 = analog_1.read()
-'''read_data2 = analog_2.read()'''
+print(read_data1)
+read_data2 = analog_2.read()
+print(read_data2)
 
-ref = db.reference("Sensores")
+ref0 = db.reference("Sensores/Sensor_0")
+ref1 = db.reference("Sensores/Sensor_1")
+ref2 = db.reference("Sensores/Sensor_2")
 
-ref.set({'sensor1': {'valor': read_data0}})
-ref.set({'sensor2': {'valor': read_data1}})
-'''ref.set({'sensor3': {'valor': read_data2}})'''
+ref0.set({'valor': read_data0})
+ref1.set({'valor': read_data1})
+ref2.set({'valor': read_data2})
 
 label1 = Label(frame1, bg="white", text=read_data0, font=("Arial Bold", 15), fg="black", width=5)
 label1.place(x=20, y=30)
 label2 = Label(frame1, bg="white", text=read_data1, font=("Arial Bold", 15), fg="black", width=5)
 label2.place(x=20, y=60)
-'''label3 = Label(frame1, bg="white", text=read_data2, font=("Arial Bold", 15), fg="black", width=5)
-label3.place(x=20, y=90)'''
+label3 = Label(frame1, bg="white", text=read_data2, font=("Arial Bold", 15), fg="black", width=5)
+label3.place(x=20, y=90)
 
 ventana.mainloop()
